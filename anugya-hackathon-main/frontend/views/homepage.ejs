@@ -195,6 +195,15 @@
             }
         }
     </style>
+    <!-- ADD THIS CODE ONLY -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="<%= process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY %>"
+      src="https://enabling-donkey-93.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
+    <!-- DO NOT MODIFY EXISTING CODE -->
 </head>
 <body class="bg-black text-white font-[Inter] overflow-x-hidden">
 
@@ -396,5 +405,36 @@
             };
         });
     </script>
+
+    <!-- ADD THIS CODE ONLY -->
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <div id="user-button"></div>
+    </div>
+
+    <script>
+        window.addEventListener('load', async function () {
+            await window.Clerk.load();
+
+            if (window.Clerk.user) {
+                window.Clerk.mountUserButton(document.getElementById('user-button'));
+            } else {
+                const signInBtn = document.createElement('button');
+                signInBtn.innerText = 'Sign In';
+                signInBtn.style.cssText = 'background: white; color: black; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;';
+                signInBtn.onclick = () => window.Clerk.openSignIn();
+                document.getElementById('user-button').appendChild(signInBtn);
+            }
+        });
+    </script>
+    <!-- DO NOT MODIFY EXISTING CODE -->
+
+    <!-- ADD THIS CODE ONLY -->
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <a href="/dashboard" style="background: linear-gradient(135deg, #8F00FF, #4CAF50); color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <i class="fas fa-chart-line"></i>
+            Go to Dashboard
+        </a>
+    </div>
+    <!-- DO NOT MODIFY EXISTING CODE -->
 </body>
 </html>

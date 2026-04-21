@@ -1,61 +1,65 @@
-# ANUGYA (Scan-Bite) - Food Ingredient Scanner
+# ANUGYA - Food Ingredient Scanner
 
-ANUGYA is a powerful web application designed to help consumers make informed decisions about their food. By simply scanning the ingredients list on packaged food products, the app provides a comprehensive safety assessment, health rating, and detailed nutritional analysis using advanced AI.
+ANUGYA is a powerful food ingredient scanner that helps users understand what's in their packaged food. Using AI (Gemini), it provides safety assessments, health ratings, and personalized advice.
 
-## 🚀 Features
+## Project Structure
 
-- **AI-Powered Ingredient Scanning**: Uses Google Gemini AI and Tesseract OCR to extract and analyze ingredients from product images.
-- **Safety Assessment**: Identifies harmful chemicals, allergens, and provides a safety rating.
-- **Detailed Nutritional Analysis**: Breaks down macronutrients, vitamins, and minerals.
-- **Mood-Based Recommendations**: Provides personalized food suggestions based on your current mood.
-- **Chemical Analysis**: Direct search for specific chemicals to understand their health impact and common uses.
-- **Responsive Design**: Modern, glassmorphic UI that works across devices.
+The project has been reorganized into a clean full-stack structure:
 
-## 🛠️ Tech Stack
+### 📂 Backend (`/backend`)
+Contains the server-side logic, API endpoints, and AI integrations.
+- **server.js**: Main entry point.
+- **routes/**: Defines all application routes.
+- **controllers/**: Contains the logic for processing requests.
+- **services/**: Handles external integrations (Gemini AI, Tesseract OCR, Sharp image processing).
+- **eng.traineddata**: Local training data for Tesseract OCR.
 
-- **Frontend**: EJS (Embedded JavaScript), Vanilla CSS, JavaScript
-- **Backend**: Node.js, Express.js
-- **OCR**: Tesseract.js
-- **Image Processing**: Sharp
-- **AI Integration**: Google Generative AI (Gemini 1.5 Flash)
-- **File Uploads**: Multer
+### 📂 Frontend (`/frontend`)
+Contains the UI-related code and static assets.
+- **views/**: EJS templates for server-side rendering.
+- **public/**: Static assets including CSS, images, and user uploads.
 
-## 📦 Installation
+## Prerequisites
 
-1.  **Clone the repository**:
-    ```bash
-    git clone [repository-url]
-    cd anugya-hackathon-main
-    ```
+- [Node.js](https://nodejs.org/) installed.
+- A Gemini API Key from [Google AI Studio](https://aistudio.google.com/).
 
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
+## Setup Instructions
 
-3.  **Set up Environment Variables**:
-    Create a `.env` file in the root directory and add your Gemini API Key:
-    ```env
-    GEMINI_API_KEY=your_gemini_api_key_here
-    ```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Surabhi-M-R/Scan-Bite.git
+   cd Scan-Bite/anugya-hackathon-main
+   ```
 
-4.  **Start the server**:
-    ```bash
-    npm start
-    ```
-    The application will be running at `http://localhost:3000`.
+2. **Backend Setup**:
+   ```bash
+   cd backend
+   npm install
+   ```
 
-## 📂 Project Structure
+3. **Environment Variables**:
+   Create a `.env` file in the `backend/` directory and add your API key:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   PORT=3000
+   ```
 
-- `server.js`: Main application logic and API routes.
-- `views/`: EJS templates for the frontend.
-- `public/`: Static assets (images, CSS, client-side JS).
-- `public/uploads/`: Temporary storage for uploaded and processed images.
+## Running the Application
 
-## 🤝 Contributing
+1. Start the backend server:
+   ```bash
+   cd backend
+   npm start
+   ```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+2. Open your browser and navigate to:
+   `http://localhost:3000`
 
-## 📄 License
+## Features
 
-This project is licensed under the ISC License.
+- **Ingredient Scanning**: Upload an image of any food product to extract and analyze ingredients.
+- **Safety Assessment**: Get instant feedback on whether a product is safe based on AI analysis.
+- **Mood-Based Recommendations**: Get healthy food suggestions based on your current mood.
+- **Chemical Analysis**: Analyze specific chemicals and their safety ratings.
+- **Detailed Nutritional Info**: View detailed breakdown of calories, macros, and vitamins.
