@@ -1,13 +1,13 @@
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 const path = require('path');
 
 // Connect to SQLite database
 const dbPath = path.resolve(__dirname, 'database.db');
-const db = new sqlite3.Database(dbPath, (err) => {
+const db = new Database('database.db', { verbose: console.log },(err) => {
   if (err) {
     console.error('Error opening database', err.message);
   } else {
-    console.log('Connected to the SQLite database.');
+    console.log('Connected to the SQLite database via better-sqlite3.');
     
     // Create users_preferences table
     db.run(`
