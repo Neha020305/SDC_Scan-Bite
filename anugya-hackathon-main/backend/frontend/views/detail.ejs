@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - ANUGYA</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --gradient-primary: linear-gradient(135deg, #6B46C1, #805AD5);
+            --gradient-secondary: linear-gradient(135deg, #805AD5, #9F7AEA);
+            --color-dark: #1A202C;
+            --color-light: #F7FAFC;
+            --color-accent: #9F7AEA;
+        }
+
+        body {
+            background: var(--color-dark);
+            color: var(--color-light);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .result-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+            background: rgba(107, 70, 193, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(159, 122, 234, 0.2);
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            color: var(--color-light);
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-section p {
+            color: #A0AEC0;
+            font-size: 1.1rem;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(159, 122, 234, 0.3);
+            margin: 0 auto 2rem;
+            display: block;
+            animation: fadeIn 1s ease-out;
+            border: 2px solid rgba(159, 122, 234, 0.3);
+        }
+
+        .analysis-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .analysis-card {
+            background: rgba(26, 32, 44, 0.8);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(159, 122, 234, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+            border: 1px solid rgba(159, 122, 234, 0.2);
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(159, 122, 234, 0.3);
+            border-color: rgba(159, 122, 234, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(159, 122, 234, 0.2);
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--color-accent);
+            text-shadow: 0 0 10px rgba(159, 122, 234, 0.5);
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            color: var(--color-light);
+            margin: 0;
+        }
+
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(159, 122, 234, 0.1);
+            border-radius: 0.8rem;
+            border: 1px solid rgba(159, 122, 234, 0.2);
+        }
+
+        .rating-circle {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--gradient-primary);
+            color: white;
+            animation: scaleIn 0.5s ease-out;
+            box-shadow: 0 0 30px rgba(159, 122, 234, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .rating-bar-container {
+            flex-grow: 1;
+        }
+
+        .rating-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(159, 122, 234, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-bar-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(159, 122, 234, 0.5);
+        }
+
+        .rating-labels {
+            display: flex;
+            justify-content: space-between;
+            color: #A0AEC0;
+            font-size: 0.9rem;
+        }
+
+        .rating-explanation {
+            color: var(--color-light);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 0;
+            padding: 1.2rem;
+            background: rgba(159, 122, 234, 0.1);
+            border-radius: 0.8rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(159, 122, 234, 0.2);
+            height: 100%;
+        }
+
+        .safety-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .safety-badge i {
+            font-size: 1.2rem;
+        }
+
+        .safety-badge.safe {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+            box-shadow: 0 0 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .safety-badge.unsafe {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+            box-shadow: 0 0 20px rgba(245, 101, 101, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .action-button {
+            padding: 1rem 2rem;
+            border-radius: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-button.primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.3);
+        }
+
+        .action-button.secondary {
+            background: rgba(159, 122, 234, 0.1);
+            color: var(--color-light);
+            border: 1px solid rgba(159, 122, 234, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.4);
+        }
+
+        .action-button i {
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(159, 122, 234, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(159, 122, 234, 0.5);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(159, 122, 234, 0.3);
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                transform: scale(0);
+                opacity: 0;
+            }
+            to { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .analysis-card {
+                padding: 1.5rem;
+            }
+
+            .rating-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .rating-circle {
+                margin: 0 auto;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Add glowing effect to important elements */
+        .safety-badge, .rating-circle, .card-header i {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(159, 122, 234, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(159, 122, 234, 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="header-section">
+            <h1>Analysis Results</h1>
+            <p>Detailed analysis of your food product</p>
+        </div>
+
+        <img src="<%= imagePath %>" alt="Product Image" class="product-image">
+
+        <div class="analysis-grid">
+            <!-- Safety Assessment Card -->
+            <div class="analysis-card">
+                <div class="card-header">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Safety Assessment</h3>
+                </div>
+                <div class="safety-badge <%= analysis.safetyAssessment.isSafe ? 'safe' : 'unsafe' %>">
+                    <i class="fas <%= analysis.safetyAssessment.isSafe ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
+                    <%= analysis.safetyAssessment.isSafe ? 'Safe to Consume' : 'Not Safe to Consume' %>
+                </div>
+                <div class="rating-container">
+                    <div class="rating-circle">
+                        <%= analysis.safetyRating.score %>
+                    </div>
+                    <div class="rating-bar-container">
+                        <div class="rating-bar">
+                            <div class="rating-bar-fill" style="width: <%= (analysis.safetyRating.score / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="rating-labels">
+                            <span>Low Safety</span>
+                            <span>High Safety</span>
+                        </div>
+                        <div class="rating-explanation">
+                            <%= analysis.safetyRating.explanation %>
+                        </div>
+                    </div>
+                </div>
+                <% if (analysis.safetyAssessment.warnings && analysis.safetyAssessment.warnings.length > 0) { %>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Warnings</h4>
+                            <ul>
+                                <% analysis.safetyAssessment.warnings.forEach(warning => { %>
+                                    <li><%= warning %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Key Ingredients Card -->
+            <div class="analysis-card">
+                <div class="card-header">
+                    <i class="fas fa-list"></i>
+                    <h3>Key Ingredients</h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4><i class="fas fa-check-circle"></i> Main Ingredients</h4>
+                        <ul>
+                            <% analysis.keyIngredients.forEach(ingredient => { %>
+                                <li><%= ingredient %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                    <% if (analysis.harmfulChemicals && analysis.harmfulChemicals.length > 0) { %>
+                        <div class="info-item">
+                            <h4><i class="fas fa-exclamation-circle"></i> Harmful Chemicals</h4>
+                            <ul>
+                                <% analysis.harmfulChemicals.forEach(chemical => { %>
+                                    <li><%= chemical %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Health Benefits Card -->
+            <div class="analysis-card">
+                <div class="card-header">
+                    <i class="fas fa-heart"></i>
+                    <h3>Health Information</h3>
+                </div>
+                <div class="info-grid">
+                    <% if (analysis.healthBenefits && analysis.healthBenefits.length > 0) { %>
+                        <div class="info-item">
+                            <h4><i class="fas fa-plus-circle"></i> Health Benefits</h4>
+                            <ul>
+                                <% analysis.healthBenefits.forEach(benefit => { %>
+                                    <li><%= benefit %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+                    <div class="info-item">
+                        <h4><i class="fas fa-info-circle"></i> Consumption Recommendations</h4>
+                        <p><%= analysis.consumptionRecommendations %></p>
+                    </div>
+                    <% if (analysis.childSafety) { %>
+                    <div class="info-item">
+                        <h4><i class="fas fa-child"></i> Child Safety & Impact</h4>
+                        <p><%= analysis.childSafety %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Alternative Products Card -->
+            <% if (analysis.alternativeProducts && analysis.alternativeProducts.length > 0) { %>
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Alternative Products</h3>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4><i class="fas fa-lightbulb"></i> Better Alternatives</h4>
+                            <ul>
+                                <% analysis.alternativeProducts.forEach(alternative => { %>
+                                    <li><%= alternative %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/upload" class="action-button secondary">
+                <i class="fas fa-arrow-left"></i>
+                Scan Another Product
+            </a>
+            <a href="/" class="action-button primary">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add intersection observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.analysis-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

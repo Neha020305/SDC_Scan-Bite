@@ -14,12 +14,12 @@ const app = express();
 // APP CONFIGURATION
 app.set('view engine', 'ejs');
 // Point to frontend/views
-app.set('views', path.join(__dirname, '../frontend/views'));
+app.set('views', path.join(__dirname, './frontend/views'));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Point to frontend/public
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(__dirname, './frontend/public')));
 
 // FILE UPLOAD SETUP
 const upload = multer({
