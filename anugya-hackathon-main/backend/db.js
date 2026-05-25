@@ -32,6 +32,23 @@ const db = new sqlite3.Database(dbPath, (err) => {
         });
       }
     });
+
+    // Create scans table
+    db.run(`
+      CREATE TABLE IF NOT EXISTS scans (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        product_name TEXT,
+        safety_score REAL,
+        chemicals_count INTEGER,
+        is_safe BOOLEAN,
+        scanned_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `, (err) => {
+      if (err) {
+        console.error('Error creating scans table', err.message);
+      }
+    });
   }
 });
 

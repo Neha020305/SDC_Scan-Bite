@@ -67,47 +67,54 @@ exports.renderDashboard = async (req, res) => {
       return res.redirect('/#sign-in');
     }
 
-    // Query SQLite for preferences
-    db.get(`SELECT cuisine, diet FROM users_preferences WHERE user_id = ?`, [userId], async (err, row) => {
+    db.all(`SELECT * FROM scans WHERE user_id = ? ORDER BY scanned_at DESC`, [userId], (err, rows) => {
       if (err) {
-        console.error('Database error:', err);
-        return res.render('dashboard', { data: { error: 'Database error occurred' } });
+        console.error('Database error fetching scans:', err);
+        return res.render('dashboard', { data: { error: 'Database error occurred' }, stats: null });
       }
 
-      const cuisine = row?.cuisine || 'American';
-      const diet = row?.diet || 'balanced';
+      let totalScans = 0;
+      let totalScore = 0;
+      let totalChemicals = 0;
+      let validScoreCount = 0;
 
-      // Call external API (Placeholder Spoonacular API using process.env.FOOD_API_KEY)
-      try {
-        // Using a mock external API call since Spoonacular might require a real key
-        const apiUrl = `https://api.spoonacular.com/recipes/complexSearch`;
-        const response = await axios.get(apiUrl, {
-          params: {
-            apiKey: process.env.FOOD_API_KEY,
-            cuisine: cuisine,
-            diet: diet,
-            number: 3
-          },
-          validateStatus: () => true // Prevent crashing if API key is invalid dummy
-        });
+      const recentScans = [];
 
-        const apiData = response.status === 200 ? response.data : { error: 'Failed to fetch external data (Invalid API Key?)', details: response.data };
-        
-        // Add user preferences to data payload
-        const finalData = {
-          preferences: { cuisine, diet },
-          externalData: apiData
-        };
-
-        res.render('dashboard', { data: finalData });
-      } catch (apiErr) {
-        console.error('External API error:', apiErr.message);
-        res.render('dashboard', { data: { error: 'External API call failed' } });
+      if (rows && rows.length > 0) {
+        totalScans = rows.length;
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          if (row.safety_score) {
+            totalScore += row.safety_score;
+            validScoreCount++;
+          }
+          if (row.chemicals_count) {
+            totalChemicals += row.chemicals_count;
+          }
+          if (i < 5) {
+            recentScans.push({
+              productName: row.product_name,
+              scannedAt: row.scanned_at,
+              isSafe: row.is_safe
+            });
+          }
+        }
       }
+
+      const avgSafetyScore = validScoreCount > 0 ? (totalScore / validScoreCount).toFixed(1) : 0;
+
+      const stats = {
+        totalScans,
+        avgSafetyScore,
+        totalChemicals,
+        recentScans
+      };
+
+      res.render('dashboard', { data: {}, stats });
     });
   } catch (err) {
     console.error('Dashboard rendering error:', err);
-    res.render('dashboard', { data: { error: 'Server error' } });
+    res.render('dashboard', { data: { error: 'Server error' }, stats: null });
   }
 };
 

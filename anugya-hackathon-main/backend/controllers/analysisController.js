@@ -76,6 +76,20 @@ exports.analyzeImage = async (req, res) => {
       console.error('Error cleaning up processed image:', err);
     }
 
+    if (userId) {
+      const productName = analysis.productName || 'Unknown Product';
+      const safetyScore = analysis.safetyRating?.score || 0;
+      const chemicalsCount = analysis.harmfulChemicals?.length || 0;
+      const isSafe = analysis.safetyAssessment?.isSafe ? 1 : 0;
+      
+      db.run(
+        `INSERT INTO scans (user_id, product_name, safety_score, chemicals_count, is_safe) VALUES (?, ?, ?, ?, ?)`,
+        [userId, productName, safetyScore, chemicalsCount, isSafe],
+        (dbErr) => {
+          if (dbErr) console.error('Error saving scan to database:', dbErr);
+        }
+      );
+    }
 
     // Render the results
     res.render('detail', {
@@ -139,7 +153,7 @@ exports.analyzeChemical = async (req, res) => {
 
 exports.getMoodRecommendations = async (req, res) => {
   try {
-    const { mood } = req.body;
+    const { mood, gender } = req.body;
     if (!mood) {
       return res.status(400).json({ error: 'Mood is required' });
     }
@@ -158,7 +172,7 @@ exports.getMoodRecommendations = async (req, res) => {
       }
     }
 
-    const recommendations = await geminiService.getMoodFoodRecommendations(mood, moodCategory);
+    const recommendations = await geminiService.getMoodFoodRecommendations(mood, moodCategory, gender);
     res.json(recommendations);
   } catch (err) {
     console.error('Mood Food Recommendation Error:', err);

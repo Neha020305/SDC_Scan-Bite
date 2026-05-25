@@ -49,6 +49,7 @@ ${prefsText}
       "harmfulChemicals": ["list of harmful chemicals if any"],
       "healthBenefits": ["list of health benefits if any"],
       "consumptionRecommendations": "string",
+      "childSafety": "string explaining how the product ingredients specifically affect children",
       "alternativeProducts": ["list of safer alternatives if any"]
     }
 
@@ -154,9 +155,9 @@ ${prefsText}
   }
 }
 
-async function getMoodFoodRecommendations(mood, moodCategory) {
+async function getMoodFoodRecommendations(mood, moodCategory, gender = 'not specified') {
   try {
-    const prompt = `Provide 10-15 healthy food recommendations that help with ${mood} mood. 
+    const prompt = `Provide 10-15 healthy food recommendations that help with ${mood} mood for a ${gender}. 
     Consider the following aspects:
     - Foods that naturally boost mood and energy
     - Foods rich in mood-regulating nutrients
@@ -164,6 +165,7 @@ async function getMoodFoodRecommendations(mood, moodCategory) {
     - Foods that promote better sleep (if relevant)
     - Foods that support mental clarity
     - Foods that help with emotional balance
+    - Nutritional needs specific to ${gender}
 
     For each food, include:
     - A brief explanation of how it helps with this specific mood
